@@ -13,3 +13,69 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model Asset {
+  id        String   @id @default(cuid())
+  symbol    String   @unique // e.g., "AAPL", "BTC", "ETH"
+  name      String   // e.g., "Apple Inc.", "Bitcoin", "Ethereum"
+  type      AssetType // STOCK, CRYPTO, COMMODITY, etc.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  prices      Price[]
+  predictions Prediction[]
+
+  @@map("assets")
+}
+
+model Price {
+  id        String   @id @default(cuid())
+  assetId   String
+  price     Decimal  @db.Decimal(20, 8) // Current/closing price
+  timestamp DateTime @default(now())
+  volume    Decimal? @db.Decimal(20, 8) // Trading volume
+  high      Decimal? @db.Decimal(20, 8) // High price in the period
+  low       Decimal? @db.Decimal(20, 8) // Low price in the period
+  open      Decimal? @db.Decimal(20, 8) // Opening price in the period
+  close     Decimal? @db.Decimal(20, 8) // Closing price in the period
+
+  // Relations
+  asset Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  // Indexes for performance
+  @@index([assetId, timestamp])
+  @@index([timestamp])
+  @@map("prices")
+}
+
+model Prediction {
+  id             String   @id @default(cuid())
+  assetId        String
+  predictedPrice Decimal  @db.Decimal(20, 8)
+  targetTime     DateTime // When the prediction is for
+  confidence     Float    // Confidence score (0.0 to 1.0)
+  modelVersion   String   // Version of the ML model used
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  asset Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  // Indexes for performance
+  @@index([assetId, targetTime])
+  @@index([targetTime])
+  @@index([modelVersion])
+  @@map("predictions")
+}
+
+enum AssetType {
+  STOCK
+  CRYPTO
+  COMMODITY
+  FOREX
+  INDEX
+  BOND
+  ETF
+}
