@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CryptoControllerTsController } from './crypto.controller.ts.controller';
+import { CryptoControllerTsController } from './crypto.controller';
 
 describe('CryptoControllerTsController', () => {
   let controller: CryptoControllerTsController;

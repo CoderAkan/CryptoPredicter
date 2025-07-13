@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 // import { ApiTags } from '@nestjs/swagger' 
-import { StockService } from 'src/external-apis/services/stock.service.ts/stock.service.ts.service';
+import { StockService } from 'src/external-apis/services/stock.service.ts/stock.service';
 import { StockQuoteDto, StockTimeSeriesDto } from 'src/external-apis/types';
 
 // @ApiTags('stocks')

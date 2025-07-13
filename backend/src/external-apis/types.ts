@@ -15,3 +15,23 @@ export interface StockTimeSeriesDto {
     close: number,
     volume: number
 }
+
+
+export interface SimplerCryptoPriceDto {
+    coin_symbol: string;
+    price: number;
+    percent_change_24h: number;
+    last_updated: Date;
+}
+
+export interface SimplerTopCoinDto {
+    id: string,
+    symbol: string,
+    slug: string,
+    name: string,
+    price: number,
+    percent_change_24h: number,
+    market_cap: number, 
+    volume_24h: number,
+    cmc_rank: number
+}
